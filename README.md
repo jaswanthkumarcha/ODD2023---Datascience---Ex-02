@@ -1,194 +1,122 @@
-# Ex02-Outlier
-
-# Aim:
+# Ex02 Outlier Detection
+## AIM:
 You are given bhp.csv which contains property prices in the city of banglore, India. You need to examine price_per_sqft column and do following,
-
-(1) Remove outliers using IQR
-
-(2) After removing outliers in step 1, you get a new dataframe.
-
-(3) use zscore of 3 to remove outliers. This is quite similar to IQR and you will get exact same result
-
-(4) for the data set height_weight.csv find the following
-
-(i) Using IQR detect weight outliers and print them
-
-(ii) Using IQR, detect height outliers and print them
-
-# ALGORITHM:
-# STEP 1:
-Read the given Data.
-
-# STEP 2:
-Get the information about the data.
-
-# STEP 3:
-Detect the Outliers using IQR method and Z score.
-
-# STEP 4:
-Remove the outliers:
-
-# STEP 5:
-Plot the datas using box plot.
-
-# PROGRAM:
-  Name: chadalawada jaswanth
-  
-  Reg no: 212221040030
-  ```
+- (1) Remove outliers using IQR
+- (2) After removing outliers in step 1, you get a new dataframe.
+- (3) use zscore of 3 to remove outliers. This is quite similar to IQR and you will get exact same result
+- (4) for the data set height_weight.csv find the following
+   - (i) Using IQR detect weight outliers and print them
+   - (ii) Using IQR, detect height outliers and print them
+## EXPLANATION:
+An Outlier is an observation in a given dataset that lies far from the rest of the observations. That means an outlier is vastly larger or smaller than the remaining values in the set. An outlier is an observation of a data point that lies an abnormal distance from other values in a given population. (odd man out). Outliers badly affect mean and standard deviation of the dataset. These may statistically give erroneous results.
+## ALGORITHM:
+- Step1: Read the given Data.
+- Step2: Get the information about the data.
+- Step3: Detect the Outliers using IQR method and Z score.
+- Step4: Remove the outliers.
+- Step5: Plot the datas using Box Plot.
+```
+Developed by :chadalawada jaswanth
+register number : 212221040030
+```
+## CODE:
+### bhp.csv:
+```
 import pandas as pd
 import seaborn as sns
-age = [1,3,28,27,25,92,30,39,40,50,26,24,29,94]
-af=pd.DataFrame(age)
-af
-```
-
-<img width="49" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/3e07b80e-68d3-47bf-8617-675a82f7f76d">
-
-```
-sns.boxplot(data=af)
-```
-<img width="286" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/b2e694ee-5d35-41aa-8135-81fcbeae529a">
-
-```
-sns.scatterplot(data=af)
-```
-<img width="290" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/d7ea0bd1-b3be-4931-85b2-0688cf837cf1">
-
-```
-q1=af.quantile(0.25)
-q2=af.quantile(0.5)
-q3=af.quantile(0.75)
-iqr=q3-q1
-irq=af.quantile(0.5)
-```
-```
-low=q1-1.5*iqr
-low
-```
-<img width="69" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/3f44bada-feca-42d2-a602-75ef93fadda8">
-
-```
-high=q3+1.5*iqr
-high
-```
-<img width="66" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/8a8e591b-7862-40ff-80f1-d351fcb1c780">
-
-```
-aq=af[((af>=low)&(af<=high))]
-aq.dropna()
-```
-<img width="52" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/3a42186f-b1da-4646-b62b-b659152036c5">
-
-```
-sns.boxplot(data=af)
-```
-<img width="283" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/5efbc140-3782-45b1-b723-4b04cbf9e87f">
-
-```
-af=af[((af>=low)&(af<=high))]
-af.dropna()
-```
-<img width="52" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/d991b2e9-4ad5-4e78-afa0-f244ca53ff19">
-
-```
-sns.boxplot(data=af)
-```
-<img width="285" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/9733583f-c1de-486d-9f35-5eb9850e1c9f">
-
-```
-sns.scatterplot(data=af)
-```
-<img width="282" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/05f71607-e5c0-499a-b397-0b10f88e0009">
-  
-```
-import pandas as pd
 import numpy as np
-import seaborn as sns
-import pandas as pd
 from scipy import stats
-```
-```
-data = {'weight':[12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,69,202,72,75,78,81,84,232,87,90,93,96,99,258]}
-df=pd.DataFrame(data)
-df
-```
-<img width="52" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/9666a946-ca20-4801-95d4-25a68b5aec77">
+from google.colab import files
+uploaded=files.upload()
+df=pd.read_csv('bhp.csv')
+df.info()
+print(df.describe())
+df.head()
+#BEFORE REMOVING OUTLIER
+sns.boxplot(y='price_per_sqft',data=df)
 
-python
-sns.boxplot(data=df)
+# PERFORMING IQR METHOD
+q1=df['price_per_sqft'].quantile(0.25)
+q3=df['price_per_sqft'].quantile(0.75)
+IQR=q3-q1
+low=q1-1.5*IQR
+high=q3+1.5*IQR
+new=df[((df['price_per_sqft']>=low)&(df['price_per_sqft']<=high))]
 
-<img width="286" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/bd33df32-2dea-4b33-8be6-2d1b81eab374">
+#AFTER REMOVING OUTLIER using IQR method
+sns.boxplot(y='price_per_sqft',data=new)
 
-```
-z=np.abs(stats.zscore(df))
-print(df[z['weight']>3])
-```
-<img width="53" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/7a647b1c-2f99-4394-8de3-021557977e78">
+# PERFORMING Zscore METHOD
+z=np.abs(stats.zscore(df['price_per_sqft']))
+new2=df[(z<3)]
 
+#AFTER REMOVING OUTLIER using Zscore method
+sns.boxplot(y="price_per_sqft",data=new2)
 ```
-val=[12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,69,202,72,75,78,81,84,232,87,90,93,96,99,258]
-df=pd.DataFrame(data)
-```
-```
-out=[]
-def d_o(val):
-  ts=3
-  m=np.mean(val)
-  sd=np.std(val)
-  for i in val:
-    z=(i-m)/sd
-    if np.abs(z)>ts:
-      out.append(i)
-  return out
-```
-```
-op=d_o(val)
-op
-```
-<img width="68" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/80263fed-d9b8-4069-93d2-d194f424a419">
-
+### height_weight.csv:
 ```
 import pandas as pd
-import numpy as np
 import seaborn as sns
-from scipy import stats
-```
-```
-id=pd.read_csv("iris.csv")
-id
-```
-<img width="272" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/2a34017f-c89a-48c4-8f22-6f1e0df886ff">
+from google.colab import files
+uploaded=files.upload()
+df=pd.read_csv('height_weight.csv')
+df.info()
+df.describe()
+df.head()
 
-```
-sns.boxplot(x='sepal_width',data=id)
-```
-<img width="277" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/fbacb6f4-4d89-469c-829e-25a3b3ee38ac">
+#BEFORE REMOVING OUTLIER in HEIGHT
+sns.boxplot(y='height',data=df)
+#PERFORMING IQR METHOD ON HEIGHTS
+height_q1 = df['height'].quantile(0.25)
+height_q3 = df['height'].quantile(0.75)
+height_IQR = height_q3 - height_q1
+height_low = height_q1 - 1.5 * height_IQR
+height_high = height_q3 + 1.5 * height_IQR
+height_new=df[((df['height']>=height_low)&(df['height']<=height_high))]
+#AFTER REMOVING OUTLIER in HEIGHT
+sns.boxplot(y='height',data=height_new)
 
+#BEFORE REMOVING OUTLIER in WEIGHT
+sns.boxplot(y='weight',data=df)
+#PERFORMING IQR METHOD ON HEIGHTS
+weight_q1 = df['weight'].quantile(0.25)
+weight_q3 = df['weight'].quantile(0.75)
+weight_IQR = weight_q3 - weight_q1
+weight_low = weight_q1 - 1.5 * weight_IQR
+weight_high = weight_q3 + 1.5 * weight_IQR
+weight_new=df[((df['weight']>=weight_low)&(df['weight']<=weight_high))]
+#AFTER REMOVING OUTLIER in WEIGHT
+sns.boxplot(y='weight',data=weight_new)
 ```
-c1=id.sepal_width.quantile(0.25)
-c3=id.sepal_width.quantile(0.75)
-iq=c3-c1
-print(c3)
-```
-<img width="29" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/2143cf85-e8bd-4f03-bb72-562dc0bfc7f2">
+## OUTPUT:
+### bhp.csv:
+![bhp](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/ac329473-447e-4074-a67b-83ec89c74598)
 
-```
-rid=id[((id.sepal_width<(c1-1.5*iq))|(id.sepal_width>(c3+1.5*iq)))]
-rid['sepal_width']
-```
-<img width="206" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/0c6bd8aa-e54d-4824-8011-827c3e0485f9">
+![bhp head](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/a26a59db-13c8-4bb7-9d4a-4c5d48b2da2b)
 
-```
-delid=id[~((id.sepal_width<(c1-1.5*iq))|(id.sepal_width>(c3+1.5*iq)))]
-delid
-```
-<img width="268" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/bc3a76ca-73fb-4406-8f9a-590fe97b0f48">
+![1out](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/f2691be0-ca5d-42d5-b197-45d9a0013cf0)
 
-```
-sns.boxplot(x='sepal_width',data=delid)
-```
-<img width="269" alt="image" src="https://github.com/TejaswiniGugananthan/ODD2023---Datascience---Ex-02/assets/121222763/212cc2fc-03cd-4fe6-a484-a2c2a182a51e">
+![2out](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/e51f3a4b-d629-47c5-876b-a32f685cf6d3)
 
-# Result:
-Hence the given set of data is read and the outliers are removed using the IQR method and Zscore method.
+![3out](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/2a2b650f-32a4-4e35-88cb-e346fcc3b814)
+### weight_height.csv:
+![height weight](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/8c2b42a3-43ef-4538-bc6e-16f36b8b7498)
+
+![height head](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/aa051aaa-a4f3-46fc-acd2-69b8e991c2e7)
+
+![height1](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/fa40996a-8529-4cb8-b6c1-d6be674cb2a8)
+
+![height2](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/87fc5b3f-d8aa-410a-9a47-138ecebc7fdb)
+
+![height3](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/f1175dea-05e8-424f-81c5-05597ca6e60c)
+
+![height4](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/28060644-5baa-46cc-b176-153656090a6f)
+
+
+## RESULT:
+Hence the given set of data is read and the outliers are removed using the IQR method and Zscore method.
+
+
+
+    
+
