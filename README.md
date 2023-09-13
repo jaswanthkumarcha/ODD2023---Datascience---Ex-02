@@ -1,122 +1,101 @@
-# Ex02 Outlier Detection
-## AIM:
-You are given bhp.csv which contains property prices in the city of banglore, India. You need to examine price_per_sqft column and do following,
-- (1) Remove outliers using IQR
-- (2) After removing outliers in step 1, you get a new dataframe.
-- (3) use zscore of 3 to remove outliers. This is quite similar to IQR and you will get exact same result
-- (4) for the data set height_weight.csv find the following
-   - (i) Using IQR detect weight outliers and print them
-   - (ii) Using IQR, detect height outliers and print them
-## EXPLANATION:
-An Outlier is an observation in a given dataset that lies far from the rest of the observations. That means an outlier is vastly larger or smaller than the remaining values in the set. An outlier is an observation of a data point that lies an abnormal distance from other values in a given population. (odd man out). Outliers badly affect mean and standard deviation of the dataset. These may statistically give erroneous results.
-## ALGORITHM:
-- Step1: Read the given Data.
-- Step2: Get the information about the data.
-- Step3: Detect the Outliers using IQR method and Z score.
-- Step4: Remove the outliers.
-- Step5: Plot the datas using Box Plot.
+# Ex-02_DS_Outlier_Detection_and_Removal
+# AIM
+To detect and remove the outliers in the given data set and save the final data.
+
+# Explanation
+Outlier is a data object that deviates significantly from the rest of the data objects and behaves in a different manner. They can be caused by measurement or execution errors. The analysis of outlier data is referred to as outlier analysis or outlier mining. The box plot is a useful graphical display for describing the behavior of the data in the middle as well as at the ends of the distributions. The box plot uses the median and the lower and upper quartiles (defined as the 25th and 75th percentiles). If the lower quartile is Q1 and the upper quartile is Q3, then the difference (Q3 - Q1) is called the interquartile range or IQ.
+
+# ALGORITHM
+## STEP 1
+Import the required packages(pandas,numpy,scipy)
+## STEP 2
+Read the given csv file
+## STEP 3
+Convert the file into a dataframe and get information of the data.
+## STEP 4
+Remove the non numerical data columns using drop() method.
+## STEP 5
+Detect the outliers in the data set using z scores method.
+## STEP 6
+Remove the outliers by z scores and list manupilation or by using Interquartile Range(IQR)
+## STEP 7
+Check if the outliers are removed from data set using graphical methods.
+## STEP 8
+Save the final data set into the file
+
+# CODE
 ```
-Developed by :chadalawada jaswanth
-register number : 212221040030
-```
-## CODE:
-### bhp.csv:
-```
+/* 
+Name :chadalawada jaswanth
+Register Number : 212221040030
+**Removing Outliers - bhp.csv**
 import pandas as pd
-import seaborn as sns
 import numpy as np
-from scipy import stats
-from google.colab import files
-uploaded=files.upload()
-df=pd.read_csv('bhp.csv')
-df.info()
-print(df.describe())
-df.head()
-#BEFORE REMOVING OUTLIER
-sns.boxplot(y='price_per_sqft',data=df)
-
-# PERFORMING IQR METHOD
-q1=df['price_per_sqft'].quantile(0.25)
-q3=df['price_per_sqft'].quantile(0.75)
+df = pd.read_csv('/content/bhp.csv')
+df.head(10)
+df.boxplot()
+df.shape
+q1=df.price_per_sqft.quantile(0.25)
+q3=df.price_per_sqft.quantile(0.75)
 IQR=q3-q1
-low=q1-1.5*IQR
-high=q3+1.5*IQR
-new=df[((df['price_per_sqft']>=low)&(df['price_per_sqft']<=high))]
+lower_limit=q1-1.5*IQR
+upper_limit=q3+1.5*IQR
+lower_limit,upper_limit
+df[(df.price_per_sqft<lower_limit)|(df.price_per_sqft>upper_limit)]
+df[(df.price_per_sqft<=lower_limit)&(df.price_per_sqft>=upper_limit)]
+df = df.drop(["location","size","bhk"],axis=1) 
+from scipy import stats
+z=np.abs(stats.zscore(df))
+z
+df2=df.copy()
+df2=df2[(z<3).all(axis=1)]
+df2
+df2.boxplot()
 
-#AFTER REMOVING OUTLIER using IQR method
-sns.boxplot(y='price_per_sqft',data=new)
-
-# PERFORMING Zscore METHOD
-z=np.abs(stats.zscore(df['price_per_sqft']))
-new2=df[(z<3)]
-
-#AFTER REMOVING OUTLIER using Zscore method
-sns.boxplot(y="price_per_sqft",data=new2)
-```
-### height_weight.csv:
-```
+**Removing Outliers - height_weight.csv**
 import pandas as pd
-import seaborn as sns
-from google.colab import files
-uploaded=files.upload()
-df=pd.read_csv('height_weight.csv')
-df.info()
-df.describe()
-df.head()
-
-#BEFORE REMOVING OUTLIER in HEIGHT
-sns.boxplot(y='height',data=df)
-#PERFORMING IQR METHOD ON HEIGHTS
-height_q1 = df['height'].quantile(0.25)
-height_q3 = df['height'].quantile(0.75)
-height_IQR = height_q3 - height_q1
-height_low = height_q1 - 1.5 * height_IQR
-height_high = height_q3 + 1.5 * height_IQR
-height_new=df[((df['height']>=height_low)&(df['height']<=height_high))]
-#AFTER REMOVING OUTLIER in HEIGHT
-sns.boxplot(y='height',data=height_new)
-
-#BEFORE REMOVING OUTLIER in WEIGHT
-sns.boxplot(y='weight',data=df)
-#PERFORMING IQR METHOD ON HEIGHTS
-weight_q1 = df['weight'].quantile(0.25)
-weight_q3 = df['weight'].quantile(0.75)
-weight_IQR = weight_q3 - weight_q1
-weight_low = weight_q1 - 1.5 * weight_IQR
-weight_high = weight_q3 + 1.5 * weight_IQR
-weight_new=df[((df['weight']>=weight_low)&(df['weight']<=weight_high))]
-#AFTER REMOVING OUTLIER in WEIGHT
-sns.boxplot(y='weight',data=weight_new)
+import numpy as np
+df1 = pd.read_csv('/content/height_weight.csv')
+df1.head(10)
+df1.drop("gender",axis=1)
+df1.boxplot()
+q1=df1.weight.quantile(0.25)
+q3=df1.weight.quantile(0.75)
+IQR=q3-q1
+lower_limit=q1-1.5*IQR
+upper_limit=q3+1.5*IQR
+lower_limit,upper_limit
+df1_new=df1[(df1.weight<lower_limit)&(df1.weight>upper_limit)]
+df1_new.boxplot()
+q1=df1.height.quantile(0.25)
+q3=df1.height.quantile(0.75)
+IQR=q3-q1
+lower_limit=q1-1.5*IQR
+upper_limit=q3+1.5*IQR
+lower_limit,upper_limit
+df1_new=df1[(df1.weight<lower_limit)&(df1.weight>upper_limit)]
+df1_new.boxplot()
+*/
 ```
-## OUTPUT:
-### bhp.csv:
-![bhp](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/ac329473-447e-4074-a67b-83ec89c74598)
-
-![bhp head](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/a26a59db-13c8-4bb7-9d4a-4c5d48b2da2b)
-
-![1out](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/f2691be0-ca5d-42d5-b197-45d9a0013cf0)
-
-![2out](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/e51f3a4b-d629-47c5-876b-a32f685cf6d3)
-
-![3out](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/2a2b650f-32a4-4e35-88cb-e346fcc3b814)
-### weight_height.csv:
-![height weight](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/8c2b42a3-43ef-4538-bc6e-16f36b8b7498)
-
-![height head](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/aa051aaa-a4f3-46fc-acd2-69b8e991c2e7)
-
-![height1](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/fa40996a-8529-4cb8-b6c1-d6be674cb2a8)
-
-![height2](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/87fc5b3f-d8aa-410a-9a47-138ecebc7fdb)
-
-![height3](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/f1175dea-05e8-424f-81c5-05597ca6e60c)
-
-![height4](https://github.com/deepikasrinivasans/ODD2023---Datascience---Ex-02/assets/119393935/28060644-5baa-46cc-b176-153656090a6f)
-
-
-## RESULT:
-Hence the given set of data is read and the outliers are removed using the IQR method and Zscore method.
-
-
-
-    
-
+# OUPUT
+## Removing Outliers - bhp.csv
+![img1](https://user-images.githubusercontent.com/127843136/227731877-d2981784-8d77-4e17-8b4c-8df5a8321b2a.png)
+![img2](https://user-images.githubusercontent.com/127843136/227731884-94c8cd3d-0eae-40f9-a6b5-38a051e3f4ab.png)
+## Using IQR method to remove Outliers of price_per_sqft
+![img3](https://user-images.githubusercontent.com/127843136/227731894-f461dc1f-1258-4fb4-9872-95ae140a67ae.png)
+## Removing non-numerical columns
+![img4](https://user-images.githubusercontent.com/127843136/227731899-78470890-7647-41f5-8495-243e529db14e.png)
+## Using z-score of 3 method to remove Outliers of price_per_sqft
+![img5](https://user-images.githubusercontent.com/127843136/227731907-6b7faad5-6998-4f20-8d14-a523b10bd287.png)
+![img6](https://user-images.githubusercontent.com/127843136/227731919-7d562fca-d6e6-4998-9a2a-0abfda8655a4.png)
+## Removing Outliers - height_weight.csv
+![image1](https://user-images.githubusercontent.com/127843136/227731926-e0c01378-151d-47c8-a13d-233f595e9e8b.png)
+## Removing non numerical columns
+![image2](https://user-images.githubusercontent.com/127843136/227731941-4482a162-6557-41dc-9b45-0a3a7e651920.png)
+![image3](https://user-images.githubusercontent.com/127843136/227731946-d4fbec8c-4656-412e-a324-c195052b2fed.png)
+## Removing Outliers of weight using IQR
+![image4](https://user-images.githubusercontent.com/127843136/227731951-659f8f76-12f0-437b-9a87-3697f12e6144.png)
+## Removing Outliers of height using IQR
+![image5](https://user-images.githubusercontent.com/127843136/227731957-7a9d4a25-6653-44ce-a230-2ad20969fb47.png)
+# RESULT
+Thus the outliers are detected and removed in the given file and the final data set is saved into the file.
